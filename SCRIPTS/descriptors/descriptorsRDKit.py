@@ -63,6 +63,7 @@ def calculateDescriptorsMolRDKitOriginal(molecule):
     descriptors["NumHeteroatoms"] = Lipinski.NumHeteroatoms(molecule)
     descriptors["NumRotatableBonds"] = Lipinski.NumRotatableBonds(molecule)
     descriptors["NumAmideBonds"] = rdMolDescriptors.CalcNumAmideBonds(molecule)
+    descriptors["NumAtomStereoCenters"] = Lipinski.NumAtomStereoCenters(molecule)
 
     descriptors["NumAromaticRings"] = Lipinski.NumAromaticRings(molecule)
     descriptors["NumAliphaticRings"] = Lipinski.NumAliphaticRings(molecule)
