@@ -3,7 +3,7 @@ A FAIR (*Findable, Accessible, Interoperable, and Reusable*) workflow to the acc
 ---
 
 <div align="center;">
-<img src="https://i.imgur.com/BSUS5ck.png" width="600">
+<img src="https://i.imgur.com/BSUS5ck.png" width="800">
 </div>
 
 ---
