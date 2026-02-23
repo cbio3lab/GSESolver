@@ -435,7 +435,28 @@ for (i in 1:(ncol(descs)-1)){
 }
 descs_fil <- descs_fil %>% select_if(~ !any(is.na(.)))
 colnames(descs_fil) <- means$descs
+
+
+
+#Correlation plot for the descriptors after UFS
+library(ggcorrplot)
+
+corr <- round(cor(descs_fil),2)
+p <- ggcorrplot(corr,show.diag = F,type='lower', lab = TRUE, lab_size=1, tl.cex = 6) + 
+  scale_fill_gradient2(low='blue4',high='red4',breaks=c(-1,-0.5,0,0.5,1),limit=c(-1,1),name='Correlation')
+
+ggsave(p,file='PLOTS/correlacion_logSo/correlation_plot.png',width = 4000, height = 4000,units = 'px')
+ggsave(p,file='PLOTS/correlacion_logSo/correlation_plot.pdf',width = 4000, height = 4000,units = 'px')
+
+
+
+####
+
 descs_fil$dev <- descs$dev
+
+write.csv(means, file = "DATABASES/descs_list.csv")
+
+
 
 
 # Perform PCA

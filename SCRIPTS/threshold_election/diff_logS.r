@@ -66,12 +66,12 @@ for (i in 0:19) {
 
 
 
-pval <- data.frame(matrix(ncol=20,nrow=225))
+pval <- data.frame(matrix(ncol=20,nrow=226))
 cols <- c()
 for(n in 1:20){
   new <- c()
-  for(i in 1:225){
-    new <- c(new,t.test(ifelse(descs[,225+n]==1,descs[,i],NA),ifelse(descs[,225+n]==0,descs[,i],NA))[[3]])
+  for(i in 1:226){
+    new <- c(new,t.test(ifelse(descs[,226+n]==1,descs[,i],NA),ifelse(descs[,226+n]==0,descs[,i],NA))[[3]])
   }
   pval[,n] <- new
   cols <- c(cols,paste0('pvalue',n/10))
