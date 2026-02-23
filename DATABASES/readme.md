@@ -1,5 +1,5 @@
 # AqSolDBc.csv
-Latest version of AQSolDB used for this work [](doi.org/10.1038/s41597-019-0151-1).
+Latest version of AQSolDB used for this work [doi.org/10.1038/s41597-019-0151-1](doi.org/10.1038/s41597-019-0151-1).
 
 # AqSolDBc_noions.csv
 AQSolDB after filtering every molecule with ionizable groups.
