@@ -27,3 +27,4 @@ This repository contains every script, dataset, and supplementary information of
 **RECENT UPDATES IN OUR COLAB NOTEBOOK:**
 
 * 23/02/2026 *(Added GSESolver logo and description)*
+* 01/04/2026 *(Fixed a small RDKit incompatibility)*
