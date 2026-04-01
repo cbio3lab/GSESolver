@@ -16,11 +16,11 @@ $$\log{S_0}=0.5-0.01(mp-25)-\log{P_{\text{N}}}$$
 
 *When should I use the GSE?* This notebook provides an Artificial Neural Network model that assesses if your molecules of interest might have an accurate $\log{S_0}$ prediction using the GSE. 
 
-Click here to access our Google Colab Script: [https://colab.research.google.com/drive/1bzTD7NvdyLNfh4UF2GJ0UN-swyYTDD4P?usp=sharing](https://colab.research.google.com/drive/1bzTD7NvdyLNfh4UF2GJ0UN-swyYTDD4P?usp=sharing)
+Click here to access our Google Colab Notebook: [https://colab.research.google.com/drive/1bzTD7NvdyLNfh4UF2GJ0UN-swyYTDD4P?usp=sharing](https://colab.research.google.com/drive/1bzTD7NvdyLNfh4UF2GJ0UN-swyYTDD4P?usp=sharing) Otherwise, you can download the notebook from this repo and run it locally. 
 
 ---
 
-This repository contains every script, dataset, and supplementary information of our manuscript "Critical evaluation of the General Solubility Equation: When is it a valid solubility predictor?", *Working paper*, **2026**.
+This repository contains every script, dataset, and supplementary information of our manuscript "Data-driven critical evaluation of the General Solubility Equation: When is it a valid solubility predictor?", *Working paper*, **2026**.
 
 ---
 
