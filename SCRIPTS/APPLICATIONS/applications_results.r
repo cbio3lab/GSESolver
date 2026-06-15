@@ -9,7 +9,7 @@ setwd("C:/Users/ebert/OneDrive - Universidad de Costa Rica/SOLUBILIDAD")
 data <- read_excel('SCRIPTS/APPLICATIONS/LogS agrochemical.xlsx')
 
 
-
+data$dev <- ifelse(data$DlogS>1, 'YES','NO')
 data$dev_binary <- ifelse(data$dev=='NO', 0,1)
 data$GSESolver_binary <- ifelse(data$`GSESolver prediction`=='Use GSE', 0, 1)
 
@@ -73,13 +73,18 @@ ggsave(p, filename = 'PLOTS/APPLICATIONS/corr_agrochemicals.pdf', width = 7, hei
 
 
 
-#residuals plot de los outliers
+#residuals plot 
 
 data$res <- data$logS_GSE - data$logS
 
 p <- ggplot(data = data ) + 
-  geom_segment(aes(x = logS_GSE, y = res, xend = logS_GSE, yend = 0), color = 'gray50', linewidth = 0.1) +
-  geom_point(aes(x = logS_GSE, y = res, color = Type, shape = `GSESolver prediction`), size = 4, alpha = 0.8) + 
+  # Add the filled rectangle first so it appears behind everything else
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = -1, ymax = 1,
+           alpha = 0.2, fill = "blue4") +
+  geom_segment(aes(x = logS_GSE, y = res, xend = logS_GSE, yend = 0), 
+               color = 'gray50', linewidth = 0.1) +
+  geom_point(aes(x = logS_GSE, y = res, color = Type, shape = `GSESolver prediction`), 
+             size = 4, alpha = 0.8) + 
   geom_hline(yintercept = 0, linewidth = 1) +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA, color = 'black', linewidth = 1),
@@ -89,7 +94,7 @@ p <- ggplot(data = data ) +
         legend.text = element_text(size = 12)) + 
   labs(x = 'logS GSE', y = 'Residuals (logS units)') + 
   coord_cartesian(xlim = c(-8,2.6), ylim = c(-2.5,5)) + 
-  scale_color_manual(values=c('red4','green4', 'magenta4', 'orange2'),name='Type') +
+  scale_color_manual(values=c('red4','green4', 'magenta4', 'orange2'), name='Type') +
   scale_shape_manual(values = c(17,19)) + 
   scale_y_continuous(position='right')
   

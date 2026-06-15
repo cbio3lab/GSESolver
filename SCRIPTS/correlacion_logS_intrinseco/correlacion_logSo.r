@@ -557,7 +557,7 @@ p <- ggplot(tsne_df) +
        y = paste0("t-SNE Dimension 2")) + 
   geom_point(aes(x = X, y = Y, color = factor(digit)),
              alpha = 0.6, size = 3) + 
-  scale_color_manual(TeX("Is $\\Delta \\log{S} > 1$?"),values = c('gray50','blue4'))
+  scale_color_manual(TeX("Is $\\Delta \\log{S} > 1$?"),values = c('blue4','gray50'))
 
 ggsave(p, filename = 'PLOTS/correlacion_logSo/tSNE.png', width = 7, height = 6, units = 'in')
 ggsave(p, filename = 'PLOTS/correlacion_logSo/tSNE.pdf', width = 7, height = 6, units = 'in')
