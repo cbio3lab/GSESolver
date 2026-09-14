@@ -561,3 +561,161 @@ p <- ggplot(tsne_df) +
 
 ggsave(p, filename = 'PLOTS/correlacion_logSo/tSNE.png', width = 7, height = 6, units = 'in')
 ggsave(p, filename = 'PLOTS/correlacion_logSo/tSNE.pdf', width = 7, height = 6, units = 'in')
+
+
+
+
+### define empirical mp and logP thresholds
+
+data$TPSA <- descs$TPSA_Obabel
+
+
+generalised_threshold <- function(df, pred_col, outcome_col, 
+                                  direction = "greater", 
+                                  metric = "youden") {
+  # Input validation
+  if (!(pred_col %in% names(df))) stop(paste(pred_col, "not found in df"))
+  if (!(outcome_col %in% names(df))) stop(paste(outcome_col, "not found in df"))
+  
+  # Ensure outcome is numeric 0/1 (YES=1, NO=0)
+  df <- df %>%
+    mutate(
+      outcome_num = ifelse(!!sym(outcome_col) == "YES", 1, 0),
+      pred_val = !!sym(pred_col)
+    )
+  
+  # Get unique thresholds (or you can use a finer grid if needed)
+  thresholds <- sort(unique(df$pred_val))
+  
+  # Function to evaluate a single threshold
+  evaluate_one <- function(thr) {
+    if (direction == "greater") {
+      pred <- ifelse(df$pred_val > thr, 1, 0)
+    } else { # "less"
+      pred <- ifelse(df$pred_val < thr, 1, 0)
+    }
+    
+    tp <- sum(pred == 1 & df$outcome_num == 1)
+    tn <- sum(pred == 0 & df$outcome_num == 0)
+    fp <- sum(pred == 1 & df$outcome_num == 0)
+    fn <- sum(pred == 0 & df$outcome_num == 1)
+    
+    # Avoid division by zero in edge cases
+    sens <- ifelse((tp + fn) == 0, 0, tp / (tp + fn))
+    spec <- ifelse((tn + fp) == 0, 0, tn / (tn + fp))
+    acc <- (tp + tn) / nrow(df)
+    prec <- ifelse((tp + fp) == 0, 0, tp / (tp + fp))
+    f1 <- ifelse((prec + sens) == 0, 0, 2 * prec * sens / (prec + sens))
+    youden <- sens + spec - 1
+    
+    return(data.frame(
+      threshold = thr,
+      accuracy = acc,
+      sensitivity = sens,
+      specificity = spec,
+      f1 = f1,
+      youden = youden
+    ))
+  }
+  
+  # Apply to all thresholds
+  results <- do.call(rbind, lapply(thresholds, evaluate_one))
+  
+  # Select best based on chosen metric
+  if (metric == "youden") {
+    best <- results[which.max(results$youden), ]
+  } else if (metric == "accuracy") {
+    best <- results[which.max(results$accuracy), ]
+  } else if (metric == "f1") {
+    best <- results[which.max(results$f1), ]
+  } else {
+    stop("metric must be one of 'youden', 'accuracy', 'f1'")
+  }
+  
+  return(list(
+    best_threshold = best$threshold,
+    best_metric_value = best[[metric]],
+    all_results = results,
+    direction = direction,
+    metric = metric
+  ))
+}
+
+thresholds_mp <- generalised_threshold(data, pred_col = 'mp', outcome_col = 'dev',
+                                       direction = 'greater', metric = 'youden')
+cat('Best threshold for mp:', thresholds_mp$best_threshold, "\n")
+
+
+thresholds_TPSA <- generalised_threshold(data, pred_col = 'TPSA', outcome_col = 'dev',
+                                       direction = 'greater', metric = 'youden')
+cat('Best threshold for TPSA:', thresholds_TPSA$best_threshold, "\n")
+
+
+thresholds_logP<- generalised_threshold(data, pred_col = 'logPN', outcome_col = 'dev',
+                                         direction = 'greater', metric = 'youden')
+cat('Best threshold for logPN:', thresholds_logP$best_threshold, "\n")
+
+
+p1 <- ggplot(data) + 
+  geom_density(aes(x = mp, fill = dev), alpha = 0.6) + 
+  scale_fill_manual(TeX("Is $\\Delta \\log{S} > 1$?"),values = c('blue4','gray50')) + 
+  geom_vline(xintercept = thresholds_mp$best_threshold) +
+  annotate("text", x = thresholds_mp$best_threshold-143, y = 0.0045, label = paste("Best Threshold =", thresholds_mp$best_threshold,"°C")) +
+  theme(panel.background = element_blank(), panel.border = element_rect(fill=NA,colour="black",size=1),
+        axis.title.x = element_text(size = 16),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(size = 16),
+        legend.title = element_text(size=12),
+        legend.text = element_text(size=10),
+        legend.position = c(0.87,0.83)) +
+  labs(x = "Melting point (°C)",
+       y = "")
+
+
+p2 <- ggplot(data) + 
+  geom_density(aes(x = TPSA, fill = dev), alpha = 0.6) + 
+  scale_fill_manual(TeX("Is $\\Delta \\log{S} > 1$?"),values = c('blue4','gray50')) + 
+  geom_vline(xintercept = thresholds_TPSA$best_threshold) +
+  annotate("text", x = thresholds_TPSA$best_threshold+105, y = 0.009, label = paste("Best Threshold =", thresholds_TPSA$best_threshold)) +
+  theme(panel.background = element_blank(), panel.border = element_rect(fill=NA,colour="black",size=1),
+        axis.title.x = element_text(size = 16),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(size = 16),
+        legend.title = element_text(size=12),
+        legend.text = element_text(size=10),
+        legend.position = c(0.87,0.8)) +
+  labs(y = '', x = bquote('TPSA'~(ring(A)^2)),parse=TRUE)
+
+
+
+densities <- list(p1,p2)
+ncol <- 2
+nrow <- 1
+
+library(gridExtra) #create a grid plot
+
+#grid plot creation
+grid_density <- grid.arrange(do.call(arrangeGrob, c(densities,ncol = ncol, nrow = nrow)))
+ggsave('PLOTS/correlacion_logSo/empirical_thresholds.pdf', plot = grid_density, width = 11, height = 3.5, units = 'in')
+ggsave('PLOTS/correlacion_logSo/empirical_thresholds.png', plot = grid_density, width = 11, height = 3.5, units = 'in')
+
+
+p <- ggplot(data) + 
+  geom_density(aes(x = logPN, fill = dev), alpha = 0.6) + 
+  scale_fill_manual(TeX("Is $\\Delta \\log{S} > 1$?"),values = c('blue4','gray50')) + 
+  geom_vline(xintercept = thresholds_logP$best_threshold) +
+  annotate("text", x = -4.5, y = 0.2, label = paste("Best Threshold =", thresholds_logP$best_threshold)) +
+  theme(panel.background = element_blank(), panel.border = element_rect(fill=NA,colour="black",size=1),
+        axis.title.x = element_text(size = 16),
+        axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(size = 16),
+        legend.title = element_text(size=12),
+        legend.text = element_text(size=10),
+        legend.position = c(0.87,0.8)) +
+  labs(y = '', x = TeX("$\\log{P_N}$"))
+
+ggsave('PLOTS/correlacion_logSo/empirical_thresholds_logP.pdf', plot = p, width = 5.5, height = 3.5, units = 'in')
+ggsave('PLOTS/correlacion_logSo/empirical_thresholds_logP.png', plot = p, width = 5.5, height = 3.5, units = 'in')
