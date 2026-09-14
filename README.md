@@ -20,7 +20,10 @@ Click here to access our Google Colab Notebook: [https://colab.research.google.c
 
 ---
 
-This repository contains every script, dataset, and supplementary information of our manuscript "Data-driven critical evaluation of the General Solubility Equation: When is it a valid solubility predictor?", *Working paper*, **2026**.
+This repository contains every script, dataset, and supplementary information of our manuscript "Data-driven critical evaluation of the General Solubility Equation", *J. Chem. Inf. Model.*, **2026**, *66 (17)*: 11330–11347.  DOI: https://doi.org/10.1021/acs.jcim.6c01182
+
+<img src="https://acs.silverchair-cdn.com/acs/content_public/journal/jcisd8/issue/66/17/2/jcisd8.2026.66.issue-17.xlargecover-4.jpeg?Expires=1792416707&Signature=5KVZy4whht5LJ3XviKEP5U7TuYcnhk0I5ovbq80TTVAXEudiPMnOVUTNzesdOG3C5AgK-2KXLDE-UpRxf2-aHCl1iqiih4~2drZg8KAHm0CpGnyIbT4FbFk97vexcRXIGVddQsDNTuerrsCHkqHQ6NcUqF0etI4smKnxvHccCSyTHoMDCCccMNqFVHybwp1rh1e0vzCoBMSaaUQMZccqp-aGLGPbZT8WUIOVciryaIar8qk~1t2usAXRrG3nvTUi-FTZvSrrRFprjJh0Bc2tjgo301iVFyL912ZK3TBb85jCOJgZyDdnYln68W~SYwR1aRcCh9XdIGsgG7BBtYN-tg__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA" alt="A descriptive summary" width="500">
+
 
 ---
 
@@ -28,3 +31,4 @@ This repository contains every script, dataset, and supplementary information of
 
 * 23/02/2026 *(Added GSESolver logo and description)*
 * 01/04/2026 *(Fixed a small RDKit incompatibility)*
+* 14/09/2026 *(Added new citation link)*
